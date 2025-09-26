@@ -1,4 +1,4 @@
-package User;
+package UI;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.BufferedReader;
@@ -104,4 +104,5 @@ public class User1 extends JFrame implements ActionListener {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
     }
+
 }
