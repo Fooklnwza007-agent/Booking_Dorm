@@ -7,8 +7,8 @@ import javax.swing.*;
 
 public class Admin extends JFrame implements ActionListener {
     Container cp ;
-    JLabel register , username , password;
-    JTextField t1;
+    JLabel register ,email ,username , password;
+    JTextField t1, t3;
     JPasswordField t2;
     JButton b1 , b2 ;
 
