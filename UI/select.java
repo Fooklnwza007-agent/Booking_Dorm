@@ -66,7 +66,16 @@ public class select extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if(e.getSource() == b1){
+            dispose();
+            new Login();
+        }else if(e.getSource() == b2){
+            dispose();
+            new Register();
+        }else if(e.getSource() == b3){
+            dispose();
+            new Admin();
+        }
     }
     
 }

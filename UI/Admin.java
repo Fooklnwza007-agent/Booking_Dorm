@@ -59,6 +59,10 @@ public class Admin extends JFrame implements ActionListener {
         b2.setBounds(45,275,140,40);
         b2.setBackground(Color.pink);
 
+        // add listeners กูลืมไปได้ไง
+        b1.addActionListener(this);
+        b2.addActionListener(this);
+
 
         //add Component
         cp.add(register); 
@@ -80,7 +84,12 @@ public class Admin extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if(e.getSource() == b1){    //summit
+            dispose();
+        } else if(e.getSource() == b2){
+            dispose();
+            new select();
+        }
     }
     
 }

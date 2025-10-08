@@ -94,7 +94,13 @@ public class Register extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if(e.getSource() == b1){    //summit
+            dispose();
+        } else if(e.getSource() == b2){
+            dispose();
+            new select();
+        }
+    }
     }
     
-}
+
