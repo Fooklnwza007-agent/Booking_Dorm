@@ -3,6 +3,11 @@ package UI;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.io.IOException;
 
 public class Login extends JFrame implements ActionListener {
     Container cp ;
@@ -26,7 +31,7 @@ public class Login extends JFrame implements ActionListener {
     private void setComponent() {
         // เพิ่ม Component
         register = new JLabel("Log In");
-        username = new JLabel("Username");
+        username = new JLabel("Username or email");
         t1 = new JTextField();
         password = new JLabel("Password");
         t2 = new JPasswordField();
@@ -81,12 +86,52 @@ public class Login extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == b1){    //summit
-            dispose();
+        if(e.getSource() == b1){    //กดsummit
+            String usernameText = t1.getText().trim();
+            String passwordText = new String(t2.getPassword());
+
+            if(usernameText.isEmpty() || passwordText.isEmpty()){
+                JOptionPane.showMessageDialog(this, "Please enter username and password.", "Validation", JOptionPane.WARNING_MESSAGE); //pop up
+                return;
+            }
+
+            boolean ok = authenticateUser(usernameText, passwordText); 
+            if(ok == true){ 
+                JOptionPane.showMessageDialog(this, "Login successful."); //pop up
+                dispose();
+                new select();
+            }else{
+                JOptionPane.showMessageDialog(this, "Invalid username or password.", "Login Failed", JOptionPane.ERROR_MESSAGE); //pop up
+            }
         } else if(e.getSource() == b2){
-            dispose();
+            dispose(); //กดback
             new select();
         }
+    }
+
+    public boolean authenticateUser(String username, String password){
+        Path csvPath = Paths.get("File", "User.csv"); //อ่านไฟล์จาก User.csv
+        if(!Files.exists(csvPath)){ //ถ้าไฟล์ไม่มี
+            return false; //return false
+        }
+        try{ //อ่านไฟล์จาก User.csv
+            for(String line : Files.readAllLines(csvPath, StandardCharsets.UTF_8)){
+                line = line.trim(); //ลบช่องว่าง
+                if(line == null) continue; //ถ้าบรรทัดเป็น null ข้าม
+                if(line.isEmpty()) continue; //ถ้าบรรทัดว่าง ข้าม
+                String[] parts = line.split(",", 3); //แยกข้อมูลในบรรทัดเดียวเป็น 3 ชิ้นเก็บไว้ใน parts เป็น array
+                if(parts.length < 2) continue;   //ถ้าข้อมูลใน parts น้อยกว่า 2 ชิ้น ข้าม
+                String u = parts[0].trim(); //ลบช่องว่าง
+                String p = parts[1].trim(); //ลบช่องว่าง
+                if(u.equals(username) && p.equals(password)){
+                    return true; //ถ้า username และ password ตรงกับข้อมูลในไฟล์ กลับ true
+                }
+            }
+        }catch(IOException ex){
+            ex.printStackTrace(); //ถ้าไม่สามารถอ่านไฟล์ได้ กลับ false
+            return false; //return false
+        }
+        return false; //ถ้าไม่สามารถอ่านไฟล์ได้ กลับ false
     }
     }
     

@@ -4,7 +4,7 @@ import java.util.*;
 
 public class UserManage {
     private List<User> Users = new ArrayList<>();
-    private String filename = "./File/UserRegister.csv";
+    private String filename = "./File/User.csv";
 
     public UserManage(){
         LoadUser();

@@ -2,6 +2,11 @@ package UI;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.nio.file.Path;
+
 import javax.swing.*;
 
 
@@ -85,11 +90,51 @@ public class Admin extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == b1){    //summit
-            dispose();
+            String usernameText = t1.getText().trim();
+            String passwordText = new String(t2.getPassword());
+
+            if(usernameText.isEmpty() || passwordText.isEmpty()){
+                JOptionPane.showMessageDialog(this, "Please enter username and password.", "Validation", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            boolean ok = authenticateAdmin(usernameText, passwordText);
+            if(ok){
+                JOptionPane.showMessageDialog(this, "Admin Login successful.");
+                dispose();
+                new select();
+            }else{
+                JOptionPane.showMessageDialog(this, "Invalid username or password.", "Login Failed", JOptionPane.ERROR_MESSAGE);
+            }
         } else if(e.getSource() == b2){
             dispose();
             new select();
         }
     }
-    
-}
+
+    public boolean authenticateAdmin(String username, String password){
+        Path csvPath = Paths.get("File", "admin.csv");
+        if(!Files.exists(csvPath)){
+            return false;
+        }
+        try{
+            for(String line : Files.readAllLines(csvPath, StandardCharsets.UTF_8)){
+                if(line == null) continue;
+                line = line.trim();
+                if(line.isEmpty()) continue;
+                String[] parts = line.split(",", 3);
+                if(parts.length < 2) continue;
+                String u = parts[0].trim();
+                String p = parts[1].trim();
+                if(u.equals(username) && p.equals(password)){
+                    return true;
+                }
+            }
+        }catch(IOException ex){
+            ex.printStackTrace();
+            return false;
+        }
+        return false;
+    }
+    }
+

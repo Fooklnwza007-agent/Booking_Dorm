@@ -8,7 +8,7 @@ import javax.swing.*;
 
 public class User1 extends JFrame implements ActionListener {
     Container cp ;
-    JLabel name , id, dormLabel  ;
+    JLabel name , id, dormLabel ;
     JTextField t1 ,t2 ;
     JButton b1 ;
     JComboBox<String> dormCombo;
@@ -48,7 +48,6 @@ public class User1 extends JFrame implements ActionListener {
         b1.setFont(new Font("Arial",Font.BOLD,14));
         b1.setForeground(Color.black);
         b1.setBackground(Color.pink );
-        b1.addActionListener(this);
         cp.add(b1); 
 
         imagePanel = new JPanel() {
@@ -74,8 +73,6 @@ public class User1 extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
     }
-
-    // ComboBox ดึงข้อมูลจากไฟล์ CSV
     public static JComboBox<String> province_to_combobox(){
         JComboBox<String> tmp = new JComboBox<>();
         File f = null;
@@ -104,10 +101,7 @@ public class User1 extends JFrame implements ActionListener {
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == b1) {
-            new User2();
-        }
-
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
     }
-
 }

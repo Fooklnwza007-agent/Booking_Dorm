@@ -4,6 +4,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 public class Register extends JFrame implements ActionListener {
     Container cp ;
@@ -95,10 +101,57 @@ public class Register extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == b1){    //summit
-            dispose();
+            String emailText = t4.getText().trim();
+            String usernameText = t1.getText().trim();
+            String passwordText = new String(t2.getPassword());
+            String confirmPasswordText = new String(t3.getPassword());
+
+            if(usernameText.isEmpty() || emailText.isEmpty() || passwordText.isEmpty() || confirmPasswordText.isEmpty()){
+                JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Validation", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            if(passwordText.length() < 8){
+                JOptionPane.showMessageDialog(this, "Password must be at least 8 characters.", "Validation", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            if(!passwordText.equals(confirmPasswordText)){
+                JOptionPane.showMessageDialog(this, "Passwords do not match.", "Validation", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            boolean saved = saveUserToCsv(usernameText, passwordText, emailText);
+            if(saved){
+                JOptionPane.showMessageDialog(this, "Registration successful.");
+                dispose();
+                new Login();
+            }else{
+                JOptionPane.showMessageDialog(this, "Failed to save user. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         } else if(e.getSource() == b2){
             dispose();
             new select();
+        }
+    }
+    
+    private boolean saveUserToCsv(String username, String password, String email){
+        // Save to UI/User.csv, append a new line: username,password,email
+        try{
+            Path csvPath = Paths.get("File", "User.csv");
+            if(csvPath.getParent() != null){
+                Files.createDirectories(csvPath.getParent());
+            }
+            String record = username + "," + password + "," + email + System.lineSeparator();
+            Files.write(csvPath,
+                record.getBytes(StandardCharsets.UTF_8),
+                StandardOpenOption.CREATE,
+                StandardOpenOption.APPEND
+            );
+            return true;
+        }catch(IOException ex){
+            ex.printStackTrace();
+            return false;
         }
     }
     }
