@@ -2,12 +2,12 @@ package UI;
 
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.io.IOException;
+import javax.swing.*;
 
 public class Login extends JFrame implements ActionListener {
     Container cp ;
@@ -99,7 +99,7 @@ public class Login extends JFrame implements ActionListener {
             if(ok == true){ 
                 JOptionPane.showMessageDialog(this, "Login successful."); //pop up
                 dispose();
-                new select();
+                new User2();
             }else{
                 JOptionPane.showMessageDialog(this, "Invalid username or password.", "Login Failed", JOptionPane.ERROR_MESSAGE); //pop up
             }
