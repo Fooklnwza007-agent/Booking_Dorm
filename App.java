@@ -1,10 +1,12 @@
-import UI.*;
+
+import UI.User2;
+
 
 public class App{
     public static void main(String[] args) {
         //new Register();
         //new Login();
-        //new Admin();
-        new select();
+        new User2();
+        //new select();
     }
 }
