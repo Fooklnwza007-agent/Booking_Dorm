@@ -30,84 +30,15 @@ public class Room {
     
 
     public static List<String> getRoomsByDormStatic(String dormName) {
-        List<String> rooms = new ArrayList<>();
-        try {
-            String roomFileName = dormName.replace("Dorm ", "") + "Room.csv";
-            String filePath = "./File/" + roomFileName ;
-            
-            File f = new File(filePath);
-            FileReader fr = new FileReader(f);
-            BufferedReader br = new BufferedReader(fr);
-            String line;
-            
-            while ((line = br.readLine()) != null) {
-                if (!line.trim().isEmpty()) {
-                    rooms.add(line.trim());
-                }
-            }
-            br.close();
-            fr.close();
-        } catch (Exception e) {
-            System.out.println("Error loading rooms for " + dormName + ": " + e);
-        }
-        return rooms;
+        return Dorm.getRoomsByDorm(dormName);
     }
     
     public static boolean isRoomAvailableStatic(String selectedRoom) {
-        if (selectedRoom != null) {
-            String roomLower = selectedRoom.toLowerCase();
-            
-            // ตรวจสอบหลายรูปแบบของสถานะที่ไม่สามารถจองได้
-            boolean isNotAvailable = roomLower.contains("not available") || 
-                                   roomLower.contains("currently booking") ||
-                                   roomLower.contains("booking") ||
-                                   roomLower.contains("unavailable");
-            
-            return !isNotAvailable;
-        }
-        return false;
+        return Dorm.isRoomAvailable(selectedRoom);
     }
     
     public static boolean reserveRoomStatic(String dormName, String selectedRoom) {
-        if (selectedRoom != null && isRoomAvailableStatic(selectedRoom)) {
-            try {
-
-                String roomFileName = dormName.replace("Dorm ", "") + "Room.csv";
-                String filePath = "./File/" + roomFileName;
-                
-                List<String> allLines = new ArrayList<>();
-                File f = new File(filePath);
-                FileReader fr = new FileReader(f);
-                BufferedReader br = new BufferedReader(fr);
-                String line;
-                
-                while ((line = br.readLine()) != null) {
-                    allLines.add(line.trim());
-                }
-                br.close();
-                fr.close();
-                
-                // หาและอัปเดตห้องที่เลือก
-                for (int i = 0; i < allLines.size(); i++) {
-                    if (allLines.get(i).equals(selectedRoom)) {
-                        allLines.set(i, selectedRoom + " Currently booking");
-                        
-                        FileWriter fw = new FileWriter(f);
-                        BufferedWriter bw = new BufferedWriter(fw);
-                        for (String roomLine : allLines) {
-                            bw.write(roomLine);
-                            bw.newLine();
-                        }
-                        bw.close();
-                        fw.close();
-                        return true;
-                    }
-                }
-            } catch (Exception e) {
-                System.out.println("Error reserving room: " + e);
-            }
-        }
-        return false;
+        return Dorm.reserveRoom(dormName, selectedRoom);
     }
     
     // โหลดข้อมูลห้องจากไฟล์ CSV
@@ -151,87 +82,15 @@ public class Room {
     
     // ตรวจสอบสถานะห้องที่เลือก
     public boolean isRoomAvailable(String selectedRoom) {
-        if (selectedRoom != null) {
-            String roomLower = selectedRoom.toLowerCase();
-            
-            // ตรวจสอบหลายรูปแบบของสถานะที่ไม่สามารถจองได้
-            boolean isNotAvailable = roomLower.contains("not available") || 
-                                   roomLower.contains("currently booking") ||
-                                   roomLower.contains("booking") ||
-                                   roomLower.contains("unavailable");
-            
-            return !isNotAvailable;
-        }
-        return false;
+        return Dorm.isRoomAvailable(selectedRoom);
     }
     public List<String> getRoomsByDorm(String dormName) {
-    List<String> rooms = new ArrayList<>();
-    try {
-        // แปลง "Dorm A" เป็น "ARoom.csv"
-        String roomFileName = dormName.replace("Dorm ", "") + "./File/Room.csv";
-        String filePath = "./File/" + roomFileName;
-        
-        File f = new File(filePath);
-        FileReader fr = new FileReader(f);
-        BufferedReader br = new BufferedReader(fr);
-        String line;
-        
-        while ((line = br.readLine()) != null) {
-            if (!line.trim().isEmpty()) {
-                rooms.add(line.trim());
-            }
-        }
-        br.close();
-        fr.close();
-    } catch (Exception e) {
-        System.out.println("Error loading rooms for " + dormName + ": " + e);
+        return Dorm.getRoomsByDorm(dormName);
     }
-    return rooms;
-}
     // จองห้อง
     public boolean reserveRoom(String dormName, String selectedRoom) {
-    if (selectedRoom != null && isRoomAvailable(selectedRoom)) {
-        try {
-            // แปลง "Dorm A" เป็น "ARoom.csv"
-            String roomFileName = dormName.replace("Dorm ", "") + "Room.csv";
-            String filePath = "./File/" + roomFileName;
-            
-            // อ่านไฟล์ทั้งหมด
-            List<String> allLines = new ArrayList<>();
-            File f = new File(filePath);
-            FileReader fr = new FileReader(f);
-            BufferedReader br = new BufferedReader(fr);
-            String line;
-            
-            while ((line = br.readLine()) != null) {
-                allLines.add(line.trim());
-            }
-            br.close();
-            fr.close();
-            
-            // หาและอัปเดตห้องที่เลือก
-            for (int i = 0; i < allLines.size(); i++) {
-                if (allLines.get(i).equals(selectedRoom)) {
-                    allLines.set(i, selectedRoom + " Currently booking");
-                    
-                    // บันทึกลงไฟล์
-                    FileWriter fw = new FileWriter(f);
-                    BufferedWriter bw = new BufferedWriter(fw);
-                    for (String roomLine : allLines) {
-                        bw.write(roomLine);
-                        bw.newLine();
-                    }
-                    bw.close();
-                    fw.close();
-                    return true;
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Error reserving room: " + e);
-        }
+        return Dorm.reserveRoom(dormName, selectedRoom);
     }
-    return false;
-}
     // Getter methods
     public List<String> getRoomData() {
         return roomData;
