@@ -168,6 +168,7 @@ public class User2 extends JFrame implements ActionListener {
             if (selectedRoom != null) {
                 if (Room.isRoomAvailableStatic(selectedRoom)) {
                     reserveRoom();
+                    new Userinfo();
                 } else {
                     JOptionPane.showMessageDialog(this, "This room is not available for booking!", 
                                                 "Booking Not Available", JOptionPane.WARNING_MESSAGE);
