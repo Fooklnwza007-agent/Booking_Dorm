@@ -1,5 +1,8 @@
 package Lib;
 
+import javax.swing.BorderFactory;
+import javax.swing.JScrollPane;
+
 public class User {
 
 
@@ -29,5 +32,6 @@ public class User {
     public void makeBooking(Room r,int u){
 
     }
+
     
 }
