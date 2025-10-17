@@ -35,6 +35,7 @@ private javax.swing.JPanel Background4;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     
+
     // TextFields สำหรับข้อมูลผู้ใช้
     private javax.swing.JTextField jTextField3;  // first name
     private javax.swing.JTextField jTextField4;  // last name
@@ -370,36 +371,36 @@ private javax.swing.JPanel Background4;
         // ตรวจสอบว่ากรอกข้อมูลครบถ้วน
         if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || phone.isEmpty() ||
             parentFirstName.isEmpty() || parentLastName.isEmpty() || parentEmail.isEmpty() || parentPhone.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "กรุณากรอกข้อมูลให้ครบถ้วน", "คำเตือน", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "information Not completely.", "Incorrect", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         // ตรวจสอบรูปแบบอีเมล
         if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
-            JOptionPane.showMessageDialog(this, "รูปแบบอีเมลไม่ถูกต้อง", "คำเตือน", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Email incorrect", "Incorrect", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         // ตรวจสอบรูปแบบอีเมลผู้ปกครอง
         if (!parentEmail.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
-            JOptionPane.showMessageDialog(this, "รูปแบบอีเมลผู้ปกครองไม่ถูกต้อง", "คำเตือน", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "ParentEmail incorrect", "Incorrect", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         // ตรวจสอบเบอร์โทรศัพท์ (ต้องเป็นตัวเลขเท่านั้น)
         if (!phone.matches("\\d+")) {
-            JOptionPane.showMessageDialog(this, "เบอร์โทรศัพท์ต้องเป็นตัวเลขเท่านั้น", "คำเตือน", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Number incorrect", "Incorrect", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         // ตรวจสอบเบอร์โทรผู้ปกครอง
         if (!parentPhone.matches("\\d+")) {
-            JOptionPane.showMessageDialog(this, "เบอร์โทรผู้ปกครองต้องเป็นตัวเลขเท่านั้น", "คำเตือน", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Number incorrect", "Incorrect", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         // หากการตรวจสอบผ่านทั้งหมด แสดงข้อความสำเร็จ
-        JOptionPane.showMessageDialog(this, "ข้อมูลถูกบันทึกเรียบร้อยแล้ว", "สำเร็จ", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "The data has been saved successfully.", "Succeed", JOptionPane.INFORMATION_MESSAGE);
         
         // ล้างข้อมูลในช่องกรอกทั้งหมด
         clearAllFields();
@@ -435,36 +436,6 @@ private javax.swing.JPanel Background4;
         t21.setText("");          // นามสกุลผู้ปกครอง
         t23.setText("");          // อีเมลผู้ปกครอง
         t26.setText("");          // เบอร์โทรผู้ปกครอง
-    }
-
-    // ========================================
-    // MAIN METHOD - เมธอดหลัก
-    // ========================================
-    
-    /**
-     * เมธอดหลักสำหรับรันแอปพลิเคชัน
-     * @param args อาร์กิวเมนต์บรรทัดคำสั่ง
-     */
-    public static void main(String args[]) {
-        /* ตั้งค่า Look and Feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* หาก Nimbus (แนะนำใน Java SE 6) ไม่พร้อมใช้งาน ให้ใช้ look and feel เริ่มต้น
-         * สำหรับรายละเอียดเพิ่มเติม ดูที่ http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* สร้างและแสดงฟอร์ม */
-        java.awt.EventQueue.invokeLater(() -> new Userinfo().setVisible(true));
     }
 
     
