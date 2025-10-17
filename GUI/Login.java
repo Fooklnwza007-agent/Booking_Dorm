@@ -19,6 +19,8 @@ import javax.swing.JOptionPane;
  */
 public class Login extends javax.swing.JFrame {
 
+        private static final String FILE_DIR = "./File/";
+
         private static final java.util.logging.Logger logger = java.util.logging.Logger
                         .getLogger(Login.class.getName());
 
@@ -232,7 +234,7 @@ public class Login extends javax.swing.JFrame {
                         return;
                 }
 
-                String filePath = "src/main/java/com/mycompany/dormnew/File/User_password.csv";
+                String filePath = FILE_DIR + "User_password.csv";
                 boolean loginSuccess = false;
 
                 try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
@@ -256,7 +258,9 @@ public class Login extends javax.swing.JFrame {
                 }
 
                 if (loginSuccess) {
+
                         JOptionPane.showMessageDialog(this, "Login successful!");
+                        new User2();
                         this.dispose(); // ปิดหน้าล็อกอิน
                         // 🔹 เปิดหน้าหลักต่อ เช่น MainMenu หรือ UserPage
                         // new UserMenu().setVisible(true);

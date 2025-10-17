@@ -157,7 +157,7 @@ public class User2 extends JFrame implements ActionListener {
 
     }
 
-    // ระบบจองห้อง 
+    // ระบบจองห้อง (ไม่ใช้แล้ว - เปลี่ยนไปใช้ Userinfo แทน)
     private void reserveRoom() {
         String selectedRoom = (String) dormCombo.getSelectedItem();
         if (selectedRoom != null && Room.isRoomAvailableStatic(selectedRoom)) {
@@ -189,8 +189,9 @@ public class User2 extends JFrame implements ActionListener {
             String selectedRoom = (String) dormCombo.getSelectedItem();
             if (selectedRoom != null) {
                 if (Room.isRoomAvailableStatic(selectedRoom)) {
-                    reserveRoom();
-                    Userinfo userinfo = new Userinfo();
+                
+                    // เปิด Userinfo โดยตรง
+                    Userinfo userinfo = new Userinfo(selectedDorm, selectedRoom);
                     userinfo.setVisible(true);
                     User2.this.dispose(); // ปิดหน้าต่าง User2 หลังจากเปิด Userinfo
                 } else {

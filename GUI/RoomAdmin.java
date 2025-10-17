@@ -46,8 +46,7 @@ public class RoomAdmin extends javax.swing.JFrame {
     
     
     private void loadRoomCSV(String dormName) {
-    String fileName = FILE_DIR 
-                      + dormName.replaceAll("\\s+", "") + "Room.csv";
+    String fileName = FILE_DIR + dormName.replaceAll("\\s+", "") + "Room.csv";
 
     RoomModel.setRowCount(0); // ล้างข้อมูลเก่า
 
@@ -75,8 +74,7 @@ public class RoomAdmin extends javax.swing.JFrame {
 
     
     private void saveRoomCSV(String dormName) {
-    String fileName = FILE_DIR 
-                      + dormName.replaceAll("\\s+", "") + "Room.csv";
+    String fileName = FILE_DIR + dormName.replaceAll("\\s+", "") + "Room.csv";
     try (java.io.PrintWriter pw = new java.io.PrintWriter(fileName)) {
         for (int i = 0; i < RoomModel.getRowCount(); i++) {
             pw.println(RoomModel.getValueAt(i, 0) + " " + RoomModel.getValueAt(i, 1));

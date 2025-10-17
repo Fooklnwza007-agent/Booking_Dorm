@@ -34,10 +34,10 @@ public class Admin extends javax.swing.JFrame {
         setLocationRelativeTo(null); // แสดงตรงกลางจอ
 
         requestModel = new DefaultTableModel(
-                new String[] { "Room", "Username", "Firstname", "Lastname", "Phone_num", "Email", "status" }, 0);
+                new String[] { "Room", "Firstname", "Lastname", "Phone_num", "Email", "status" }, 0);
         requestTable.setModel(requestModel);
         UserModel = new DefaultTableModel(
-                new String[] { "Room", "Username", "Firstname", "Lastname", "Phone_num", "Email" }, 0);
+                new String[] { "Room", "Firstname", "Lastname", "Phone_num", "Email" }, 0);
         userTable.setModel(UserModel);
 
         loadCSV(UserModel, FILE_DIR + "User_admin.csv");
@@ -431,15 +431,25 @@ public class Admin extends javax.swing.JFrame {
     private void RejectActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_RejectActionPerformed
         int selected = requestTable.getSelectedRow();
         if (selected != -1) {
-            requestTable.setValueAt("Rejected", selected, 6);
+            requestTable.setValueAt("Rejected", selected, 5);
         } else {
             javax.swing.JOptionPane.showMessageDialog(this, "Rejected Error");
         }
     }// GEN-LAST:event_RejectActionPerformed
 
     private void save_to_csvActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_save_to_csvActionPerformed
-        saveCSV(requestModel, FILE_DIR + "requests.csv");
-        saveCSV(UserModel, FILE_DIR + "User_admin.csv");
+        // Save User table
+    saveCSV(UserModel, FILE_DIR + "User_admin.csv");
+
+    // Save request table for selected dorm
+    String selectedDorm = (String) DormSelect.getSelectedItem();
+    if (selectedDorm != null && !selectedDorm.isEmpty()) {
+        String dormFile = FILE_DIR + "requests_" + selectedDorm.replaceAll("\\s+", "") + ".csv";
+        saveCSV(requestModel, dormFile);
+    }
+
+    // Optional: show confirmation
+    JOptionPane.showMessageDialog(this, "Save Complete!");;
 
     }// GEN-LAST:event_save_to_csvActionPerformed
 
@@ -500,7 +510,7 @@ public class Admin extends javax.swing.JFrame {
             if (!file.exists()) {
                 try (PrintWriter pw = new PrintWriter(file)) {// Create File.csv
                     // เขียน header ลงไฟล์ (สอดคล้องกับ requestModel)
-                    pw.println("Room,Username,Firstname,Lastname,Phone_num,Email,status");
+                    pw.println("Room,Firstname,Lastname,Phone_num,Email,status");
                 } catch (IOException e) {
                     JOptionPane.showMessageDialog(this, "Create file failed: " + fileName);
                 }
@@ -525,36 +535,52 @@ public class Admin extends javax.swing.JFrame {
 
     }// GEN-LAST:event_jButton1ActionPerformed
 
-    private void BackToRequetsActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_BackToRequetsActionPerformed
-        int selected = userTable.getSelectedRow();
-        if (selected == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a user to move to requests.", "No selection",
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+    private void BackToRequetsActionPerformed(java.awt.event.ActionEvent evt) {
+    int selected = userTable.getSelectedRow();
+    System.out.println("BackToRequets pressed, selected = " + selected);
 
-        int confirm = JOptionPane.showConfirmDialog(this, "back to requests?", "Confirm", JOptionPane.YES_NO_OPTION);
-        if (confirm != JOptionPane.YES_OPTION)
-            return;
+    if (selected == -1) {
+        JOptionPane.showMessageDialog(this, "Please select a user to move to requests.", "No selection", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
 
-        Object room = UserModel.getValueAt(selected, 0);
-        Object username = UserModel.getValueAt(selected, 1);
-        Object firstname = UserModel.getValueAt(selected, 2);
-        Object lastname = UserModel.getValueAt(selected, 3);
-        Object phone = UserModel.getValueAt(selected, 4);
-        Object email = UserModel.getValueAt(selected, 5);
+    int confirm = JOptionPane.showConfirmDialog(this, "Move user back to requests?", "Confirm", JOptionPane.YES_NO_OPTION);
+    if (confirm != JOptionPane.YES_OPTION) return;
 
-        requestModel
-                .addRow(new Object[] { room != null ? room.toString() : "", username != null ? username.toString() : "",
-                        firstname != null ? firstname.toString() : "", lastname != null ? lastname.toString() : "",
-                        phone != null ? phone.toString() : "", email != null ? email.toString() : "", "" });
+    DefaultTableModel userModel = (DefaultTableModel) userTable.getModel();
+    Object Room = userModel.getValueAt(selected, 0);
+    Object Username = userModel.getValueAt(selected, 1);
+    Object Firstname = userModel.getValueAt(selected, 2);
+    Object Lastname = userModel.getValueAt(selected, 3);
+    Object Phone = userModel.getValueAt(selected, 4);
+    Object Email = userModel.getValueAt(selected, 5);
 
-        UserModel.removeRow(selected);
+    String selectedDorm = (String) DormSelect.getSelectedItem();
+    if (selectedDorm == null || selectedDorm.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please select a dorm first!", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
 
-        saveCSV(requestModel, FILE_DIR + "requests.csv");
-        saveCSV(UserModel, FILE_DIR + "User_admin.csv");
+    DefaultTableModel requestModel = (DefaultTableModel) requestTable.getModel();
+    requestModel.addRow(new Object[] {
+        Room != null ? Room.toString() : "",
+        Username != null ? Username.toString() : "",
+        Firstname != null ? Firstname.toString() : "",
+        Lastname != null ? Lastname.toString() : "",
+        Phone != null ? Phone.toString() : "",
+        Email != null ? Email.toString() : "",
+        ""
+    });
 
-    }// GEN-LAST:event_BackToRequetsActionPerformed
+    userModel.removeRow(selected);
+
+    String dormFile = FILE_DIR + "requests_" + selectedDorm.replaceAll("\\s+", "") + ".csv";
+    saveCSV(requestModel, dormFile);
+    saveCSV(userModel, FILE_DIR + "User_admin.csv");
+
+    JOptionPane.showMessageDialog(this, "User moved back to requests.");
+}
+// GEN-LAST:event_BackToRequetsActionPerformed
 
     /**
      * @param args the command line arguments

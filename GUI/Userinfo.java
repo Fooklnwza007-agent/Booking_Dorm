@@ -4,6 +4,9 @@ import javax.swing.JOptionPane;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.BufferedWriter;
+import java.util.List;
+import Lib.Room;
+import Lib.Dorm;
 
 /**
  * ฟอร์มข้อมูลผู้ใช้ - User Information Form
@@ -17,10 +20,19 @@ public class Userinfo extends javax.swing.JFrame {
     // ตัวแปรสำหรับเก็บข้อมูลห้องที่เลือก
     private String selectedRoom = "";
     
+    // ตัวแปรสำหรับเก็บข้อมูล Dorm ที่เลือก
+    private String selectedDorm = "";
+    
     private javax.swing.JPanel Background4;
     
     // Label หัวข้อ
     private javax.swing.JLabel BrookingDorm4;
+    
+    // Label แสดงห้องที่เลือก
+    private javax.swing.JLabel roomLabel;
+    
+    // ComboBox สำหรับเลือกห้อง
+    private javax.swing.JComboBox<String> roomComboBox;
     
     // ปุ่ม Reserve
     private javax.swing.JButton jB_Register4;
@@ -61,19 +73,32 @@ public class Userinfo extends javax.swing.JFrame {
     // ========================================
     
     /**
-     * สร้างฟอร์มข้อมูลผู้ใช้
+     * สร้างฟอร์มข้อมูลผู้ใช้ (ใช้ Dorm A เป็นค่าเริ่มต้น)
      */
     public Userinfo() {
+        this.selectedDorm = "Dorm A"; // ค่าเริ่มต้น
         initComponents();
     }
     
     /**
-     * สร้างฟอร์มข้อมูลผู้ใช้พร้อมข้อมูลห้อง
+     * สร้างฟอร์มข้อมูลผู้ใช้พร้อมข้อมูล Dorm
+     * @param dorm Dorm ที่เลือก (เช่น "Dorm A", "Dorm B")
+     */
+    public Userinfo(String dorm) {
+        this.selectedDorm = dorm;
+        initComponents();
+    }
+    
+    /**
+     * สร้างฟอร์มข้อมูลผู้ใช้พร้อมข้อมูล Dorm และห้อง
+     * @param dorm Dorm ที่เลือก
      * @param room ห้องที่เลือก
      */
-    public Userinfo(String room) {
-        initComponents();
+    public Userinfo(String dorm, String room) {
+        this.selectedDorm = dorm;
         this.selectedRoom = room;
+        initComponents();
+        updateRoomDisplay();
     }
 
     // ========================================
@@ -97,6 +122,8 @@ public class Userinfo extends javax.swing.JFrame {
         jTextField2 = new javax.swing.JTextField();
         Background4 = new javax.swing.JPanel();
         BrookingDorm4 = new javax.swing.JLabel();
+        roomLabel = new javax.swing.JLabel();
+        roomComboBox = new javax.swing.JComboBox<>();
         t21 = new javax.swing.JTextField();
         jLabel42 = new javax.swing.JLabel();
         jLabel43 = new javax.swing.JLabel();
@@ -140,6 +167,20 @@ public class Userinfo extends javax.swing.JFrame {
         BrookingDorm4.setFont(new java.awt.Font("EucrosiaUPC", 1, 48)); // NOI18N
         BrookingDorm4.setForeground(java.awt.Color.black);
         BrookingDorm4.setText("๊      User information");
+
+        // ตั้งค่า Label แสดงห้องที่เลือก
+        roomLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        roomLabel.setForeground(java.awt.Color.BLUE);
+        roomLabel.setText("Select Room:");
+
+        // ตั้งค่า ComboBox สำหรับเลือกห้อง
+        roomComboBox.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        loadRoomsForDorm(); // โหลดห้องตาม Dorm ที่เลือก
+        roomComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                roomComboBoxActionPerformed(evt);
+            }
+        });
 
         // ตั้งค่า TextField สำหรับข้อมูลผู้ปกครอง
         t21.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -294,6 +335,11 @@ public class Userinfo extends javax.swing.JFrame {
                         .addGap(292, 292, 292)
                         .addComponent(BrookingDorm4, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(Background4Layout.createSequentialGroup()
+                        .addGap(300, 300, 300)
+                        .addComponent(roomLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(roomComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(Background4Layout.createSequentialGroup()
                         .addGap(398, 398, 398)
                         .addComponent(jB_Register4, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -305,7 +351,11 @@ public class Userinfo extends javax.swing.JFrame {
             .addGroup(Background4Layout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addComponent(BrookingDorm4, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20)
+                .addGap(5, 5, 5)
+                .addGroup(Background4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(roomLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(roomComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(15, 15, 15)
                 // แถวแรก: Labels
                 .addGroup(Background4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(Background4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -415,12 +465,40 @@ public class Userinfo extends javax.swing.JFrame {
             return;
         }
 
+        // ตรวจสอบว่ามีการตั้งค่าห้องหรือไม่
+        String currentRoom = (String) roomComboBox.getSelectedItem();
+        if (currentRoom == null || currentRoom.equals("Select Room") || currentRoom.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please select a room first.", "No Room Selected", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        // ลบ "(Not Available)" ออกจากชื่อห้องก่อนบันทึก
+        String cleanRoomName = currentRoom.replace(" (Not Available)", "").trim();
+        
+        // ตรวจสอบว่าห้องว่างหรือไม่
+        if (currentRoom.contains("(Not Available)")) {
+            JOptionPane.showMessageDialog(this, "Room " + cleanRoomName + " is not available for booking!", "Room Not Available", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        selectedRoom = cleanRoomName;
+        System.out.println("Final selected room for saving: " + selectedRoom); // Debug
+
         // บันทึกข้อมูลลงใน CSV
         try {
-            saveReservationData(selectedRoom, firstName, lastName, phone, "Pending");
+            System.out.println("Saving data for room: " + selectedRoom); // Debug
+            saveReservationData(selectedRoom, firstName, lastName, phone, email, "Pending");
+            
+            // เปลี่ยนสถานะห้องเป็น "Currently booking"
+            boolean roomReserved = Dorm.reserveRoom(selectedDorm, selectedRoom);
+            if (roomReserved) {
+                System.out.println("Room " + selectedRoom + " status changed to 'Currently booking'"); // Debug
+            } else {
+                System.out.println("Failed to change room status for " + selectedRoom); // Debug
+            }
             
             // หากการตรวจสอบผ่านทั้งหมด แสดงข้อความสำเร็จ
-            JOptionPane.showMessageDialog(this, "Your room reservation has been completed.\nPlease wait for us to contact you. ", "Succeed", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "The data has been saved successfully to room " + selectedRoom + "\nRoom status changed to 'Currently booking'", "Succeed", JOptionPane.INFORMATION_MESSAGE);
             
             // ล้างข้อมูลในช่องกรอกทั้งหมด
             clearAllFields();
@@ -435,6 +513,36 @@ public class Userinfo extends javax.swing.JFrame {
     private void t25ActionPerformed(java.awt.event.ActionEvent evt) {                                    
         // TODO: เพิ่มการจัดการเหตุการณ์หากจำเป็น
     }                                   
+
+    /**
+     * จัดการเหตุการณ์ ComboBox เลือกห้อง
+     */
+    private void roomComboBoxActionPerformed(java.awt.event.ActionEvent evt) {
+        String selected = (String) roomComboBox.getSelectedItem();
+        System.out.println("Room ComboBox changed to: " + selected); // Debug
+        
+        if (selected != null && !selected.equals("Select Room")) {
+            // ลบ "(Not Available)" ออกจากชื่อห้อง
+            String roomName = selected.replace(" (Not Available)", "");
+            
+            // ตรวจสอบว่าห้องว่างหรือไม่
+            if (selected.contains("(Not Available)")) {
+                JOptionPane.showMessageDialog(this, 
+                    "Room " + roomName + " is not available for booking!", 
+                    "Room Not Available", 
+                    JOptionPane.WARNING_MESSAGE);
+                roomComboBox.setSelectedItem("Select Room");
+                setSelectedRoom("");
+                System.out.println("Room " + roomName + " is not available"); // Debug
+            } else {
+                setSelectedRoom(roomName);
+                System.out.println("Selected room set to: " + selectedRoom); // Debug
+            }
+        } else {
+            setSelectedRoom("");
+            System.out.println("Selected room cleared"); // Debug
+        }
+    }
 
     /**
      * จัดการเหตุการณ์ TextField jTextField3 (ชื่อ)
@@ -467,61 +575,72 @@ public class Userinfo extends javax.swing.JFrame {
      * @param firstName ชื่อ
      * @param lastName นามสกุล
      * @param phoneNum เบอร์โทรศัพท์
+     * @param email อีเมล
      * @param status สถานะ
      * @throws IOException หากเกิดข้อผิดพลาดในการเขียนไฟล์
      */
-    private void saveReservationData(String room, String firstName, String lastName, String phoneNum, String status) throws IOException {
+    private void saveReservationData(String room, String firstName, String lastName, String phoneNum, String email, String status) throws IOException {
+        System.out.println("saveReservationData called with room: " + room); // Debug
+        System.out.println("Data: " + firstName + "," + lastName + "," + phoneNum + "," + email + "," + status); // Debug
+        
         // บันทึกลงใน requests_add.csv
-        saveToRequestsAdd(room, firstName, lastName, phoneNum, status);
+        saveToRequestsAdd(room, firstName, lastName, phoneNum, email, status);
         
         // บันทึกลงในไฟล์ตาม Dorm
-        saveToSpecificDorm(room, firstName, lastName, phoneNum, status);
+        saveToSpecificDorm(room, firstName, lastName, phoneNum, email, status);
     }
     
     /**
      * บันทึกข้อมูลลงใน requests_add.csv
      */
-    private void saveToRequestsAdd(String room, String firstName, String lastName, String phoneNum, String status) throws IOException {
+    private void saveToRequestsAdd(String room, String firstName, String lastName, String phoneNum, String email, String status) throws IOException {
+        String dataLine = room + "," + firstName + "," + lastName + "," + phoneNum + "," + email + "," + status;
+        System.out.println("Saving to requests_add.csv: " + dataLine); // Debug
+        
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("File/requests_add.csv", true))) {
-            writer.write(room + "," + firstName + "," + lastName + "," + phoneNum + "," + status);
+            writer.write(dataLine);
             writer.newLine();
+            System.out.println("Successfully saved to requests_add.csv"); // Debug
         }
     }
     
     /**
-     * บันทึกข้อมูลลงในไฟล์ตาม Dorm (A หรือ B)
+     * บันทึกข้อมูลลงในไฟล์ตาม Dorm (A, B, C หรือ D)
      */
-    private void saveToSpecificDorm(String room, String firstName, String lastName, String phoneNum, String status) throws IOException {
+    private void saveToSpecificDorm(String room, String firstName, String lastName, String phoneNum, String email, String status) throws IOException {
         if (room == null || room.isEmpty()) {
+            System.out.println("Room is null or empty, skipping specific dorm save"); // Debug
             return;
         }
         
         String dormFile = "";
-        String block = "";
         String roomNumber = "";
         
-        // ตรวจสอบว่าเป็น Dorm A หรือ B
+        // ตรวจสอบว่าเป็น Dorm A, B, C หรือ D
         if (room.startsWith("A")) {
-            dormFile = "File/requests_DormA.csv";
-            block = "1"; // Block สำหรับ Dorm A
+            dormFile = "File/requests_A.csv";
             roomNumber = room.substring(1); // เอาตัว A ออก
         } else if (room.startsWith("B")) {
-            dormFile = "File/requests_DormB.csv";
-            block = "2"; // Block สำหรับ Dorm B
+            dormFile = "File/requests_B.csv";
             roomNumber = room.substring(1); // เอาตัว B ออก
+        } else if (room.startsWith("C")) {
+            dormFile = "File/requests_C.csv";
+            roomNumber = room.substring(1); // เอาตัว C ออก
+        } else if (room.startsWith("D")) {
+            dormFile = "File/requests_D.csv";
+            roomNumber = room.substring(1); // เอาตัว D ออก
         } else {
-            return; // ถ้าไม่ใช่ A หรือ B ก็ไม่บันทึก
+            System.out.println("Room " + room + " does not match any dorm pattern"); // Debug
+            return; // ถ้าไม่ใช่ A, B, C หรือ D ก็ไม่บันทึก
         }
         
+        System.out.println("Saving to specific dorm file: " + dormFile + " with room number: " + roomNumber); // Debug
+        
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(dormFile, true))) {
-            // สำหรับ DormA ใช้รูปแบบ: Block,Room,Firstname,Lastname,Phone_num,status
-            // สำหรับ DormB ใช้รูปแบบ: Room,Firstname,Lastname,Phone_num,status
-            if (room.startsWith("A")) {
-                writer.write(block + "," + roomNumber + "," + firstName + "," + lastName + "," + phoneNum + "," + status);
-            } else {
-                writer.write(roomNumber + "," + firstName + "," + lastName + "," + phoneNum + "," + status);
-            }
+            // ทุก Dorm ใช้รูปแบบเดียวกัน: Room,Firstname,Lastname,Phone_num,Email,status
+            writer.write(roomNumber + "," + firstName + "," + lastName + "," + phoneNum + "," + email + "," + status);
             writer.newLine();
+            System.out.println("Successfully saved to " + dormFile); // Debug
         }
     }
     
@@ -531,6 +650,16 @@ public class Userinfo extends javax.swing.JFrame {
      */
     public void setSelectedRoom(String room) {
         this.selectedRoom = room;
+        updateRoomDisplay();
+    }
+    
+    /**
+     * อัปเดตการแสดงผลห้องที่เลือก
+     */
+    private void updateRoomDisplay() {
+        if (roomLabel != null) {
+            roomLabel.setText("Selected Room: " + (selectedRoom == null || selectedRoom.isEmpty() ? "Not Selected" : selectedRoom));
+        }
     }
     
     /**
@@ -539,6 +668,84 @@ public class Userinfo extends javax.swing.JFrame {
      */
     public String getSelectedRoom() {
         return this.selectedRoom;
+    }
+    
+    /**
+     * ตั้งค่า Dorm ที่เลือก
+     * @param dorm Dorm ที่เลือก
+     */
+    public void setSelectedDorm(String dorm) {
+        this.selectedDorm = dorm;
+        loadRoomsForDorm();
+    }
+    
+    /**
+     * ดึงข้อมูล Dorm ที่เลือก
+     * @return Dorm ที่เลือก
+     */
+    public String getSelectedDorm() {
+        return this.selectedDorm;
+    }
+    
+    /**
+     * โหลดห้องสำหรับ Dorm ที่เลือก
+     */
+    private void loadRoomsForDorm() {
+        if (roomComboBox != null) {
+            roomComboBox.removeAllItems();
+            roomComboBox.addItem("Select Room");
+            
+            try {
+                List<String> rooms = Room.getRoomsByDormStatic(selectedDorm);
+                for (String room : rooms) {
+                    // ตรวจสอบสถานะห้อง
+                    boolean isAvailable = Room.isRoomAvailableStatic(room);
+                    String displayText = room;
+                    if (!isAvailable) {
+                        displayText += " (Not Available)";
+                    }
+                    roomComboBox.addItem(displayText);
+                }
+                System.out.println("Loaded " + rooms.size() + " rooms for " + selectedDorm); // Debug
+            } catch (Exception e) {
+                System.err.println("Error loading rooms for " + selectedDorm + ": " + e.getMessage());
+                // ถ้าเกิดข้อผิดพลาด ให้ใช้ห้องเริ่มต้น
+                loadDefaultRooms();
+            }
+        }
+    }
+    
+    /**
+     * โหลดห้องเริ่มต้นกรณีเกิดข้อผิดพลาด
+     */
+    private void loadDefaultRooms() {
+        if (roomComboBox != null) {
+            roomComboBox.removeAllItems();
+            roomComboBox.addItem("Select Room");
+            
+            // เพิ่มห้องเริ่มต้นตาม Dorm
+            if (selectedDorm.contains("A")) {
+                roomComboBox.addItem("A101");
+                roomComboBox.addItem("A102");
+                roomComboBox.addItem("A121");
+                roomComboBox.addItem("A122");
+            } else if (selectedDorm.contains("B")) {
+                roomComboBox.addItem("B201");
+                roomComboBox.addItem("B202");
+                roomComboBox.addItem("B221");
+                roomComboBox.addItem("B222");
+            } else if (selectedDorm.contains("C")) {
+                roomComboBox.addItem("C301");
+                roomComboBox.addItem("C302");
+                roomComboBox.addItem("C321");
+                roomComboBox.addItem("C322");
+            } else if (selectedDorm.contains("D")) {
+                roomComboBox.addItem("D401");
+                roomComboBox.addItem("D402");
+                roomComboBox.addItem("D421");
+                roomComboBox.addItem("D422");
+            }
+        }
     }
 
     

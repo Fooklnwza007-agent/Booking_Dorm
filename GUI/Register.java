@@ -514,45 +514,29 @@ public class Register extends javax.swing.JFrame {
                         MaleRadio.setSelected(false);
                         FemaleRadio.setSelected(false);
 
+                        this.dispose();
+
+                Login login = new Login();
+                login.setVisible(true);
+
                 } catch (java.io.IOException e) {
                         JOptionPane.showMessageDialog(this, "Save failed: " + e.getMessage(), "ERROR",
                                         JOptionPane.ERROR_MESSAGE);
                 }
 
-        }// GEN-LAST:event_jB_RegisterActionPerformed
+        }
 
-        private void p2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_p2ActionPerformed
-                // TODO add your handling code here:
-        }// GEN-LAST:event_p2ActionPerformed
+        
 
-        private void MaleRadioActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_MaleRadioActionPerformed
-                // TODO add your handling code here:
-        }// GEN-LAST:event_MaleRadioActionPerformed
-
-        private void p1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_p1ActionPerformed
-                // TODO add your handling code here:
-        }// GEN-LAST:event_p1ActionPerformed
-
-        private void t1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_t1ActionPerformed
-                // TODO add your handling code here:
-        }// GEN-LAST:event_t1ActionPerformed
-
-        private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
+        private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
                 this.dispose();
 
                 Login login = new Login();
                 login.setVisible(true);
-        }// GEN-LAST:event_jButton1ActionPerformed
-
-        private void t5ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_t5ActionPerformed
-                // TODO add your handling code here:
-        }// GEN-LAST:event_t5ActionPerformed
-
-        private void t2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_t2ActionPerformed
-                // TODO add your handling code here:
         }
 
-        // Variables declaration - do not modify//GEN-BEGIN:variables
+
+        
         private javax.swing.JPanel Background;
         private javax.swing.JLabel BrookingDorm;
         private javax.swing.JRadioButton FemaleRadio;

@@ -13,9 +13,9 @@ public class App {
     public static void main(String[] args) {
         // Register register = new Register();
         // register.setVisible(true);
-        // Login login = new Login();
-        // login.setVisible(true);
-        new User2();
+        Login login = new Login();
+        login.setVisible(true);
+        // new User2();
         // Userinfo userinfo = new Userinfo();
         // userinfo.setVisible(true);
     }
